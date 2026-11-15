@@ -5,8 +5,6 @@ from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
 
-from bi_rbot.base import rewards
-from bi_rbot.base.robot_config import RobotConfig
 from bi_rbot.base.robot_env import RobotEnv
 
 N_ENVS = 8
@@ -21,14 +19,6 @@ def main():
         make_vec_env(
             RobotEnv,
             N_ENVS,
-            env_kwargs={
-                "cfg": RobotConfig(
-                    reward_terms={
-                        "upright": (rewards.upright, 1.0),
-                        "height": (rewards.height, 1.0),
-                    }
-                )
-            },
             vec_env_cls=SubprocVecEnv,
         )
     )
