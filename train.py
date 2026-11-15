@@ -5,7 +5,9 @@ from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
 
-from Bi_rBot_env import Bi_rBot_Env
+from bi_rbot.base import rewards
+from bi_rbot.base.robot_config import RobotConfig
+from bi_rbot.base.robot_env import RobotEnv
 
 N_ENVS = 8
 TOTAL_STEPS = 2000000
@@ -14,7 +16,23 @@ RUN_NAME = "PPO_" + datetime.now().strftime("%d,%m,%Y,%H:%M:%S")
 
 
 def main():
-    env = VecNormalize(make_vec_env(Bi_rBot_Env, N_ENVS, vec_env_cls=SubprocVecEnv))
+
+    env = VecNormalize(
+        make_vec_env(
+            RobotEnv,
+            N_ENVS,
+            env_kwargs={
+                "cfg": RobotConfig(
+                    reward_terms={
+                        "upright": (rewards.upright, 1.0),
+                        "height": (rewards.height, 1.0),
+                    }
+                )
+            },
+            vec_env_cls=SubprocVecEnv,
+        )
+    )
+
     model = PPO(
         "MlpPolicy",
         env,
@@ -23,6 +41,7 @@ def main():
         tensorboard_log="runs/",
         device="cpu",
     )
+
     checkpoint = CheckpointCallback(
         SAVE_EVERY // N_ENVS, "models/" + RUN_NAME, "ppo", save_vecnormalize=True
     )
