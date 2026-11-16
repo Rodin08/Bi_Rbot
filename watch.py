@@ -7,7 +7,7 @@ import numpy as np
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 
-from bi_rbot.base.robot_env import RobotEnv
+from bi_rbot.tasks.locomotion.locomotion_env import LocomotionEnv
 
 
 def main():
@@ -26,7 +26,7 @@ def main():
     run = max(finished, key=lambda p: p.stat().st_mtime)
     print("Watching:", run)
 
-    raw_env = RobotEnv()
+    raw_env = LocomotionEnv()
     vec_env = DummyVecEnv([lambda: raw_env])
     vec_env = VecNormalize.load(str(run / "vecnormalize.pkl"), vec_env)
     vec_env.training = False

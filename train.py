@@ -5,10 +5,10 @@ from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
 
-from bi_rbot.base.robot_env import RobotEnv
+from bi_rbot.tasks.locomotion.locomotion_env import LocomotionEnv
 
 N_ENVS = 8
-TOTAL_STEPS = 2000000
+TOTAL_STEPS = 3000000
 SAVE_EVERY = 100000
 RUN_NAME = "PPO_" + datetime.now().strftime("%d,%m,%Y,%H:%M:%S")
 
@@ -17,7 +17,7 @@ def main():
 
     env = VecNormalize(
         make_vec_env(
-            RobotEnv,
+            LocomotionEnv,
             N_ENVS,
             vec_env_cls=SubprocVecEnv,
         )
@@ -26,7 +26,7 @@ def main():
     model = PPO(
         "MlpPolicy",
         env,
-        batch_size=264,
+        batch_size=256,
         verbose=1,
         tensorboard_log="runs/",
         device="cpu",
