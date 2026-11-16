@@ -14,13 +14,19 @@
     -->
     <body name="Body">
       <geom type="box" size="0.1 0.1 0.075" rgba="0 1 0.6 1" mass="0.2"></geom>
-      <geom name="battery" type="box" size="0.06 0.035 0.02" pos="0 0 -0.04" rgba="0.2 0.2 0.2 1" mass="0.25" contype="0" conaffinity="0"></geom>
-      <geom name="electronics" type="box" size="0.05 0.04 0.01" pos="0 0 0.03" rgba="0.1 0.4 0.1 1" mass="0.15" contype="0" conaffinity="0"></geom>
+      <geom name="battery" type="box" size="0.06 0.035 0.02" pos="0 0 -0.04" rgba="0.2 0.2 0.2 1"
+        mass="0.25" contype="0" conaffinity="0"></geom>
+      <geom name="electronics" type="box" size="0.05 0.04 0.01" pos="0 0 0.03" rgba="0.1 0.4 0.1 1"
+        mass="0.15" contype="0" conaffinity="0"></geom>
       <!-- hip + knee motors, coaxial on the hip axis (x = +-0.12, y = -0.025, z = 0) -->
-      <geom name="hip_motor_R" type="cylinder" size="0.023 0.018" pos="0.075 -0.025 0" euler="0 90 0" rgba="0.5 0.5 0.5 1" mass="0.3" contype="0" conaffinity="0"></geom>
-      <geom name="knee_motor_R" type="cylinder" size="0.023 0.018" pos="0.035 -0.025 0" euler="0 90 0" rgba="0.5 0.5 0.5 1" mass="0.3" contype="0" conaffinity="0"></geom>
-      <geom name="hip_motor_L" type="cylinder" size="0.023 0.018" pos="-0.075 -0.025 0" euler="0 90 0" rgba="0.5 0.5 0.5 1" mass="0.3" contype="0" conaffinity="0"></geom>
-      <geom name="knee_motor_L" type="cylinder" size="0.023 0.018" pos="-0.035 -0.025 0" euler="0 90 0" rgba="0.5 0.5 0.5 1" mass="0.3" contype="0" conaffinity="0"></geom>
+      <geom name="hip_motor_R" type="cylinder" size="0.023 0.018" pos="0.075 -0.025 0"
+        euler="0 90 0" rgba="0.5 0.5 0.5 1" mass="0.3" contype="0" conaffinity="0"></geom>
+      <geom name="knee_motor_R" type="cylinder" size="0.023 0.018" pos="0.035 -0.025 0"
+        euler="0 90 0" rgba="0.5 0.5 0.5 1" mass="0.3" contype="0" conaffinity="0"></geom>
+      <geom name="hip_motor_L" type="cylinder" size="0.023 0.018" pos="-0.075 -0.025 0"
+        euler="0 90 0" rgba="0.5 0.5 0.5 1" mass="0.3" contype="0" conaffinity="0"></geom>
+      <geom name="knee_motor_L" type="cylinder" size="0.023 0.018" pos="-0.035 -0.025 0"
+        euler="0 90 0" rgba="0.5 0.5 0.5 1" mass="0.3" contype="0" conaffinity="0"></geom>
       <freejoint></freejoint>
       <site name="imu" pos="0 0 0"></site>
 
@@ -30,7 +36,8 @@
 
         <body name="RightShin" pos="0 0 -0.2">
           <geom type="box" size="0.02 0.04 0.1" rgba="0 .8 1 1" mass="0.03"></geom>
-          <geom name="wheel_motor_R" type="cylinder" size="0.03 0.0125" pos="0 0 -0.1" euler="0 90 0" rgba="0.5 0.5 0.5 1" mass="0.25" contype="0" conaffinity="0"></geom>
+          <geom name="wheel_motor_R" type="cylinder" size="0.03 0.0125" pos="0 0 -0.1"
+            euler="0 90 0" rgba="0.5 0.5 0.5 1" mass="0.25" contype="0" conaffinity="0"></geom>
           <joint name="knee_R" type="hinge" pos="0 0 0.1" axis="1 0 0" range="-140 140"></joint>
 
           <body name="RightWheel" pos="0.03 0 -0.1">
@@ -46,7 +53,8 @@
 
         <body name="LeftShin" pos="0 0 -0.2">
           <geom type="box" size="0.02 0.04 0.1" rgba="0 .8 1 1" mass="0.03"></geom>
-          <geom name="wheel_motor_L" type="cylinder" size="0.03 0.0125" pos="0 0 -0.1" euler="0 90 0" rgba="0.5 0.5 0.5 1" mass="0.25" contype="0" conaffinity="0"></geom>
+          <geom name="wheel_motor_L" type="cylinder" size="0.03 0.0125" pos="0 0 -0.1"
+            euler="0 90 0" rgba="0.5 0.5 0.5 1" mass="0.25" contype="0" conaffinity="0"></geom>
           <joint name="knee_L" type="hinge" pos="0 0 0.1" axis="1 0 0" range="-140 140"></joint>
 
           <body name="LeftWheel" pos="-0.03 0 -0.1">
@@ -71,11 +79,17 @@
       torque = ctrl * gear, so ctrl -1..1 maps to -2..2 Nm.
   -->
   <actuator>
-    <position name="hip_R" joint="hip_R" kp="20" kv="0.5" ctrlrange="-1.57 1.57" forcerange="-3.5 3.5" />
-    <position name="hip_L" joint="hip_L" kp="20" kv="0.5" ctrlrange="-1.57 1.57" forcerange="-3.5 3.5" />
-    <position name="knee_R" joint="knee_R" kp="20" kv="0.5" ctrlrange="-2.44 2.44" forcerange="-3.5 3.5" />
-    <position name="knee_L" joint="knee_L" kp="20" kv="0.5" ctrlrange="-2.44 2.44" forcerange="-3.5 3.5" />
-    <motor name="wheel_R" joint="wheel_R" ctrlrange="-1 1" gear="2" />
-    <motor name="wheel_L" joint="wheel_L" ctrlrange="-1 1" gear="2" />
+    <position name="hip_R" joint="hip_R" kp="20" kv="0.5" ctrlrange="-1.57 1.57"
+      forcerange="-3.5 3.5" />
+    <position name="hip_L" joint="hip_L" kp="20" kv="0.5" ctrlrange="-1.57 1.57"
+      forcerange="-3.5 3.5" />
+    <position name="knee_R" joint="knee_R" kp="20" kv="0.5" ctrlrange="-2.44 2.44"
+      forcerange="-3.5 3.5" />
+    <position name="knee_L" joint="knee_L" kp="20" kv="0.5" ctrlrange="-2.44 2.44"
+      forcerange="-3.5 3.5" />
+    <general name="wheel_R" joint="wheel_R" ctrlrange="-1 1" forcerange="-2 2"
+      gainprm="2" biastype="affine" biasprm="0 0 -0.0597" />
+    <general name="wheel_L" joint="wheel_L" ctrlrange="-1 1" forcerange="-2 2"
+      gainprm="2" biastype="affine" biasprm="0 0 -0.0597" />
   </actuator>
 </mujoco>
