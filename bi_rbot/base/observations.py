@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from math import sqrt
 from typing import TYPE_CHECKING
 
 from numpy.typing import NDArray
@@ -8,6 +9,7 @@ if TYPE_CHECKING:
     from bi_rbot.base.robot_env import RobotEnv
 
 
+# Policy can access
 def get_body_up_axis(env: RobotEnv) -> NDArray:
     return env.data.xmat[env.body_id][6:9]
 
@@ -32,5 +34,10 @@ def get_wheel_vel(env: RobotEnv) -> NDArray:
     return env.data.qvel[env.wheel_qvel]
 
 
+# Policy cannot access
 def get_body_height(env: RobotEnv) -> float:
     return env.data.xpos[env.body_id][2] - env.cfg.ground_z
+
+
+def get_horizontal_speed(env: RobotEnv) -> float:
+    return sqrt((env.data.qvel[0] ** 2) + (env.data.qvel[1]) ** 2)
