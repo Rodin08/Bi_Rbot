@@ -29,7 +29,7 @@ class RobotEnv(gym.Env):
         ]
 
         self.observation_space = gym.spaces.Box(
-            -np.inf, np.inf, shape=(19,), dtype=np.float64
+            -np.inf, np.inf, shape=self._get_obs().shape, dtype=np.float64
         )
         self.action_space = gym.spaces.Box(-1, 1, shape=(6,), dtype=np.float32)
 
