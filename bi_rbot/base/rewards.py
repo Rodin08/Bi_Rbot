@@ -20,8 +20,13 @@ def height(env: RobotEnv) -> float:
 
 
 def action_rate(env: RobotEnv) -> float:
-    raise NotImplementedError  ### Temporary will be something like sum((action - prev_action) ** 2) ###
+    return float(sum((env.action - env.prev_action) ** 2))
 
 
 def alive(env: RobotEnv) -> float:
     return 1.0
+
+
+def knee_opposite(env: RobotEnv) -> float:
+    knee = observ.get_leg_joint_pos(env)
+    return max(0.0, -knee[1] * knee[3])

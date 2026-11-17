@@ -27,10 +27,12 @@ class RobotEnv(gym.Env):
         self.wheel_qvel = [
             self.model.joint(n).dofadr[0] for n in ("wheel_R", "wheel_L")
         ]
-
+        self.action = np.zeros(6)
+        self.prev_action = np.zeros(6)
         self.observation_space = gym.spaces.Box(
             -np.inf, np.inf, shape=self._get_obs().shape, dtype=np.float64
         )
+
         self.action_space = gym.spaces.Box(-1, 1, shape=(6,), dtype=np.float32)
 
         self.steps = 0
@@ -50,6 +52,7 @@ class RobotEnv(gym.Env):
                 observ.get_leg_joint_pos(self),
                 observ.get_leg_joint_vel(self),
                 observ.get_wheel_vel(self),
+                self.action,
             ]
         )
 
@@ -73,6 +76,8 @@ class RobotEnv(gym.Env):
         mujoco.mj_resetData(self.model, self.data)
         mujoco.mj_forward(self.model, self.data)
         self.steps = 0
+        self.action = np.zeros(6)
+        self.prev_action = np.zeros(6)
         self._on_reset()
         return self._get_obs(), {}
 
@@ -83,6 +88,8 @@ class RobotEnv(gym.Env):
             mujoco.mj_step(self.model, self.data)
 
         self.steps += 1
+        self.prev_action = self.action
+        self.action = np.clip(action, -1, 1)
 
         self._on_step()
         obs = self._get_obs()

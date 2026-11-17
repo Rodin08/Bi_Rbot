@@ -14,15 +14,17 @@ class LocomotionConfig(RobotConfig):
     yaw_rate_range: tuple = (0.0, 0.0)
 
     height_sigma: float = 0.05
-    speed_sigma: float = 0.2
-    yaw_sigma: float = 0.2
+    speed_sigma: float = 0.1
+    yaw_sigma: float = 0.3
 
     resample_every: int = 500
     reward_terms: dict = field(
         default_factory=lambda: {
             "upright": (rewards.upright, 2.0),
+            "knee_opposite": (rewards.knee_opposite, -0.5),
             "track_height": (track_height, 2.0),
-            "track_speed": (track_speed, 1.0),
+            "track_speed": (track_speed, 2.0),
             "track_yaw_rate": (track_yaw_rate, 1.0),
+            "action_rate": (rewards.action_rate, -0.05),
         }
     )
