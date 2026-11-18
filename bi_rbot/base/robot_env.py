@@ -27,6 +27,7 @@ class RobotEnv(gym.Env):
         self.wheel_qvel = [
             self.model.joint(n).dofadr[0] for n in ("wheel_R", "wheel_L")
         ]
+        self.wheel_bodies = {self.model.body(n).id for n in ("RightWheel", "LeftWheel")}
         self.action = np.zeros(6)
         self.prev_action = np.zeros(6)
         self.observation_space = gym.spaces.Box(
@@ -56,10 +57,25 @@ class RobotEnv(gym.Env):
             ]
         )
 
+    def _bad_ground_contact(self) -> bool:
+        for contact in self.data.contact[: self.data.ncon]:
+            participant_1 = self.model.geom_bodyid[contact.geom1]
+            participant_2 = self.model.geom_bodyid[contact.geom2]
+            if participant_1 == 0:
+                other = participant_2
+            elif participant_2 == 0:
+                other = participant_1
+            else:
+                continue
+            if other not in self.wheel_bodies:
+                return True
+        return False
+
     def _is_fallen(self) -> bool:
         return bool(
             observ.get_body_up_axis(self)[2] < self.cfg.min_straight_z
             or observ.get_body_height(self) < self.cfg.min_height
+            or (self._bad_ground_contact() and self.cfg.terminate_on_body_contact)
         )
 
     def _compute_reward(self):

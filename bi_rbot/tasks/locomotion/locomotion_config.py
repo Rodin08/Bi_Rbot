@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 
 from bi_rbot.base import rewards
 from bi_rbot.base.robot_config import RobotConfig
-from bi_rbot.tasks.locomotion.rewards import track_height, track_speed, track_yaw_rate
+from bi_rbot.tasks.locomotion import rewards as locomotion_rewards
 
 
 @dataclass
@@ -13,18 +13,19 @@ class LocomotionConfig(RobotConfig):
     speed_range: tuple = (-0.0, 0.0)
     yaw_rate_range: tuple = (0.0, 0.0)
 
-    height_sigma: float = 0.05
-    speed_sigma: float = 0.1
+    height_sigma: float = 0.1
+    speed_sigma: float = 0.3
     yaw_sigma: float = 0.3
 
     resample_every: int = 500
     reward_terms: dict = field(
         default_factory=lambda: {
-            "upright": (rewards.upright, 2.0),
+            "upright": (rewards.upright, 1.0),
+            "action_rate": (rewards.action_rate, -0.1),
             "knee_opposite": (rewards.knee_opposite, -0.5),
-            "track_height": (track_height, 2.0),
-            "track_speed": (track_speed, 2.0),
-            "track_yaw_rate": (track_yaw_rate, 1.0),
-            "action_rate": (rewards.action_rate, -0.05),
+            "hip_comparison": (rewards.hip_comparison, 0.6),
+            "track_height": (locomotion_rewards.track_height, 2.5),
+            "track_speed": (locomotion_rewards.track_speed, 1.5),
+            "track_yaw_rate": (locomotion_rewards.track_yaw_rate, 1.0),
         }
     )
