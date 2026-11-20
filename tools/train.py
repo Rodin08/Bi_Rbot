@@ -33,6 +33,7 @@ def main():
         env,
         batch_size=4096,
         n_epochs=5,
+        # policy_kwargs=dict(net_arch=dict(pi=[256, 256], vf=[256, 256])),
         verbose=1,
         tensorboard_log=str(RUNS),
         device="cpu",

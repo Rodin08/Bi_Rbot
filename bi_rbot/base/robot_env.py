@@ -30,6 +30,9 @@ class RobotEnv(gym.Env):
         self.wheel_bodies = {self.model.body(n).id for n in ("RightWheel", "LeftWheel")}
         self.action = np.zeros(6)
         self.prev_action = np.zeros(6)
+        self.filtered_action = np.zeros(6)
+        self.prev_filtered_action = np.zeros(6)
+
         self.observation_space = gym.spaces.Box(
             -np.inf, np.inf, shape=self._get_obs().shape, dtype=np.float64
         )
@@ -54,6 +57,7 @@ class RobotEnv(gym.Env):
                 observ.get_leg_joint_vel(self),
                 observ.get_wheel_vel(self),
                 self.action,
+                self.filtered_action,
             ]
         )
 
@@ -94,18 +98,26 @@ class RobotEnv(gym.Env):
         self.steps = 0
         self.action = np.zeros(6)
         self.prev_action = np.zeros(6)
+        self.filtered_action = np.zeros(6)
         self._on_reset()
         return self._get_obs(), {}
 
     def step(self, action):
-        self.data.ctrl[:] = action * self.cfg.action_scale
-
-        for _ in range(self.cfg.frame_skip):
-            mujoco.mj_step(self.model, self.data)
-
         self.steps += 1
         self.prev_action = self.action
+        self.prev_filtered_action = self.filtered_action
         self.action = np.clip(action, -1, 1)
+        self.filtered_action = (
+            self.cfg.action_smoothing * self.action
+            + (1 - self.cfg.action_smoothing) * self.filtered_action
+        )
+        ctrl = self.filtered_action * self.cfg.action_scale
+        fwd, turn = self.filtered_action[4], self.filtered_action[5]
+        ctrl[4] = np.clip(fwd + turn, -1, 1)  # wheel_R
+        ctrl[5] = np.clip(fwd - turn, -1, 1)  # wheel_L
+        self.data.ctrl[:] = ctrl
+        for _ in range(self.cfg.frame_skip):
+            mujoco.mj_step(self.model, self.data)
 
         self._on_step()
         obs = self._get_obs()

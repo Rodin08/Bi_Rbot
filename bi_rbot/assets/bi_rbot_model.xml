@@ -12,7 +12,7 @@
       The motor/battery/electronics geoms only add mass (contype/conaffinity 0 = no collisions).
       Motor masses are guesses (~300 g / ~250 g): no official weight found, weigh them when they arrive.
     -->
-    <body name="Body">
+    <body name="Body" pos="0 0 -0.03">
       <geom type="box" size="0.1 0.1 0.075" rgba="0 1 0.6 1" mass="0.2"></geom>
       <geom name="battery" type="box" size="0.06 0.035 0.02" pos="0 0 -0.04" rgba="0.2 0.2 0.2 1"
         mass="0.25" contype="0" conaffinity="0"></geom>

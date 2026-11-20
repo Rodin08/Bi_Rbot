@@ -11,17 +11,20 @@ class RobotConfig:
     max_steps: int = 1000
 
     action_scale: list = field(default_factory=lambda: [1.57, 1.57, 2.44, 2.44, 1, 1])
+    action_smoothing: float = 0.4
 
-    alive_reward = 0.5
+    alive_reward: float = 0.5
     terminate_on_body_contact: bool = True
 
-    hip_comparison_flexibility = 0.3
+    hip_comparison_flexibility: float = 0.3
 
     ground_z: float = -0.5
 
+    upright_sigma: float = 0.2
+
     min_height: float = 0.15
     target_height: float = 0.3
-    target_height_flexibility = 0.1
+    target_height_flexibility: float = 0.1
 
     min_straight_z: float = math.sin(
         math.radians(50)
