@@ -107,6 +107,10 @@ class RobotEnv(gym.Env):
         self.prev_action = self.action
         self.prev_filtered_action = self.filtered_action
         self.action = np.clip(action, -1, 1)
+        # TEMP symmetry test: hips and knees get their L/R average
+        if self.cfg.force_symmetric:
+            self.action[0] = self.action[1] = (self.action[0] + self.action[1]) / 2
+            self.action[2] = self.action[3] = (self.action[2] + self.action[3]) / 2
         self.filtered_action = (
             self.cfg.action_smoothing * self.action
             + (1 - self.cfg.action_smoothing) * self.filtered_action

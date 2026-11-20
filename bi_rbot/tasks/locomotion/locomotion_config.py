@@ -9,6 +9,8 @@ from bi_rbot.tasks.locomotion import rewards as locomotion_rewards
 
 @dataclass
 class LocomotionConfig(RobotConfig):
+    force_symmetric: bool = True  # TEMP symmetry test
+
     height_range: tuple = (0.25, 0.42)
     speed_range: tuple = (-0.0, 0.0)
     yaw_rate_range: tuple = (0.0, 0.0)

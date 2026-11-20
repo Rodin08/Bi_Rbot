@@ -12,6 +12,7 @@ class RobotConfig:
 
     action_scale: list = field(default_factory=lambda: [1.57, 1.57, 2.44, 2.44, 1, 1])
     action_smoothing: float = 0.4
+    force_symmetric: bool = False  # TEMP symmetry test
 
     alive_reward: float = 0.5
     terminate_on_body_contact: bool = True
