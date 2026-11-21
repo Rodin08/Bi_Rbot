@@ -9,7 +9,7 @@ from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
 from bi_rbot.tasks.locomotion.locomotion_env import LocomotionEnv
 
 N_ENVS = 8
-TOTAL_STEPS = 5000000
+TOTAL_STEPS = 15000000
 SAVE_EVERY = 100000
 RUN_NAME = "PPO_" + datetime.now().strftime("%d,%m,%Y,%H:%M:%S")
 

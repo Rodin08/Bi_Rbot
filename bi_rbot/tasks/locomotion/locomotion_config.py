@@ -16,7 +16,7 @@ class LocomotionConfig(RobotConfig):
     yaw_rate_range: tuple = (0.0, 0.0)
 
     height_sigma: float = 0.1
-    speed_sigma: float = 0.5
+    speed_sigma: float = 0.2
     yaw_sigma: float = 0.6
 
     resample_every: int = 500
