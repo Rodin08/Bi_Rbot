@@ -1,34 +1,31 @@
-import math
 from dataclasses import dataclass, field
 from pathlib import Path
 
 
 @dataclass
 class RobotConfig:
+    # --- Simulation ---
     xml_path: Path = Path(__file__).parent.parent / "assets" / "bi_rbot_model.xml"
-
     frame_skip: int = 5
     max_steps: int = 1000
-
-    action_scale: list = field(default_factory=lambda: [1.57, 1.57, 2.44, 2.44, 1, 1])
-    action_smoothing: float = 0.4
-    force_symmetric: bool = False  # TEMP symmetry test
-
-    alive_reward: float = 0.5
-    terminate_on_body_contact: bool = True
-
-    hip_comparison_flexibility: float = 0.3
-
     ground_z: float = -0.5
 
-    upright_sigma: float = 0.2
+    # --- Robot geometry ---
+    thigh_length: float = 0.2
+    shin_length: float = 0.2
+    knee_sign: int = 1
 
+    # --- Actions ---
+    action_smoothing: float = 0.4
+    leg_length_range: tuple[float, float] = (0.15, 0.38)
+    leg_length_diff_max: float = 0.05
+    leg_angle_max: float = 0.5
+
+    # --- Termination ---
+    terminate_on_body_contact: bool = True
     min_height: float = 0.15
-    target_height: float = 0.3
-    target_height_flexibility: float = 0.1
+    max_tilt_deg: float = 40
 
-    min_straight_z: float = math.sin(
-        math.radians(50)
-    )  # 90 would mean perfectly straight
-
+    # --- Reward ---
+    upright_sigma: float = 0.2
     reward_terms: dict = field(default_factory=dict)
