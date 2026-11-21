@@ -13,8 +13,8 @@ class LocomotionStats(EpisodeStats[LocomotionEnv]):
     def add_step(self, env: LocomotionEnv) -> None:
         super().add_step(env)
         self.height_errors.append(abs(observ.get_body_height(env) - env.cmd[0]))
-        self.speed_errors.append(abs(observ.get_horizontal_speed(env) - env.cmd[1]))
-        self.yaw_errors.append(abs(observ.get_gyro(env)[2] - env.cmd[2]))
+        self.speed_errors.append(abs(observ.get_forward_vel(env) - env.cmd[1]))
+        self.yaw_errors.append(abs(observ.get_yaw_rate(env) - env.cmd[2]))
 
     def summary(self) -> dict:
         result = super().summary()

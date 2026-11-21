@@ -9,8 +9,6 @@ from bi_rbot.tasks.locomotion import rewards as locomotion_rewards
 
 @dataclass
 class LocomotionConfig(RobotConfig):
-    force_symmetric: bool = True  # TEMP symmetry test
-
     height_range: tuple = (0.25, 0.42)
     speed_range: tuple = (-0.0, 0.0)
     yaw_rate_range: tuple = (0.0, 0.0)
@@ -22,12 +20,11 @@ class LocomotionConfig(RobotConfig):
     resample_every: int = 500
     reward_terms: dict = field(
         default_factory=lambda: {
-            "upright": (rewards.track_upright, 1.0),
-            "action_rate": (rewards.track_action_rate, -0.1),
-            "knee_opposite": (rewards.track_knee_opposite, -0.5),
-            "hip_comparison": (rewards.track_hip_comparison, 0.6),
-            "track_height": (locomotion_rewards.track_height, 2.5),
-            "track_speed": (locomotion_rewards.track_speed, 1.5),
-            "track_yaw_rate": (locomotion_rewards.track_yaw_rate, 1.0),
+            "upright": (rewards.reward_upright, 1.0),
+            "height": (locomotion_rewards.reward_height, 2.5),
+            "forward_vel": (locomotion_rewards.reward_forward_vel, 1.5),
+            "yaw_rate": (locomotion_rewards.reward_yaw_rate, 1.0),
+            "action_rate": (rewards.penalty_action_rate, -0.1),
+            "leg_length_diff": (rewards.penalty_leg_length_diff, -0.2),
         }
     )
