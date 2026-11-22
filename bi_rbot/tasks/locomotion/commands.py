@@ -1,10 +1,36 @@
+from __future__ import annotations
+
+from enum import IntEnum, auto
+from typing import TYPE_CHECKING
+
 import numpy as np
+from numpy.typing import NDArray
 
-from bi_rbot.tasks.locomotion.locomotion_config import LocomotionConfig
+if TYPE_CHECKING:
+    from bi_rbot.tasks.locomotion.locomotion_config import LocomotionConfig
 
 
-def sample(rng: np.random.Generator, cfg: LocomotionConfig) -> np.ndarray:
-    height = rng.uniform(cfg.height_range[0], cfg.height_range[1])
-    speed = rng.uniform(cfg.speed_range[0], cfg.speed_range[1])
-    yaw_rate = rng.uniform(cfg.yaw_rate_range[0], cfg.yaw_rate_range[1])
-    return np.array([height, speed, yaw_rate])
+class Commands(IntEnum):
+    HEIGHT = 0
+    FORWARD_VEL = auto()
+    YAW_RATE = auto()
+
+
+def _sample_or_zero(
+    rng: np.random.Generator, value_range: tuple[float, float], zero_prob: float
+) -> float:
+    if rng.random() >= zero_prob:
+        return rng.uniform(*value_range)
+    return 0.0
+
+
+def sample(rng: np.random.Generator, cfg: LocomotionConfig) -> NDArray:
+    cmd = np.zeros(len(Commands))
+    cmd[Commands.HEIGHT] = rng.uniform(*cfg.height_range)
+    cmd[Commands.FORWARD_VEL] = _sample_or_zero(
+        rng, cfg.forward_vel_range, cfg.zero_forward_vel_prob
+    )
+    cmd[Commands.YAW_RATE] = _sample_or_zero(
+        rng, cfg.yaw_rate_range, cfg.zero_yaw_rate_prob
+    )
+    return cmd
