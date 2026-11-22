@@ -26,6 +26,6 @@ class RobotConfig:
     min_height: float = 0.15
     max_tilt_deg: float = 40
 
-    # --- Reward ---
+    # --- Rewards ---
     upright_sigma: float = 0.2
     reward_terms: dict = field(default_factory=dict)

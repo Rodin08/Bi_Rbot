@@ -46,10 +46,3 @@ def penalty_action_rate(env: RobotEnv) -> float:
 
 def penalty_leg_length_diff(env: RobotEnv) -> float:
     return squared_penalty(env.action[Actions.LEG_LENGTH_DIFF])
-
-
-# TODO: add when the evaluation shows the problem
-#   penalty_pitch_rate   forward/backward rocking
-#   penalty_roll_rate    sideways rocking (terrain)
-#   penalty_torque       before the real robot (energy, motor wear)
-#   penalty_joint_limit  hip hits its limit (short leg + full angle)
