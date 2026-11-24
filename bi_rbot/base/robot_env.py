@@ -116,7 +116,8 @@ class RobotEnv(gym.Env):
 
     def _is_fallen(self) -> bool:
         return bool(
-            observ.get_projected_up(self)[2] < math.cos(math.radians(self.cfg.max_tilt_deg))
+            observ.get_projected_up(self)[2]
+            < math.cos(math.radians(self.cfg.max_tilt_deg))
             or observ.get_body_height(self) < self.cfg.min_height
             or (self._bad_ground_contact() and self.cfg.terminate_on_body_contact)
         )
