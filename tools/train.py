@@ -9,9 +9,10 @@ from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
 from bi_rbot.tasks.locomotion.locomotion_env import LocomotionEnv
 
 N_ENVS = 8
-TOTAL_STEPS = 15000000
-SAVE_EVERY = 100000
-RUN_NAME = "PPO_" + datetime.now().strftime("%d,%m,%Y,%H:%M:%S")
+SEED = 0
+TOTAL_STEPS = 15_000_000
+SAVE_EVERY = 100_000
+RUN_NAME = f"PPO_{datetime.now():%Y-%m-%d_%H-%M-%S}_s{SEED}"
 
 ROOT = Path(__file__).resolve().parent.parent
 MODELS = ROOT / "models"
@@ -19,12 +20,12 @@ RUNS = ROOT / "runs"
 
 
 def main():
-
     env = VecNormalize(
         make_vec_env(
             LocomotionEnv,
             N_ENVS,
             vec_env_cls=SubprocVecEnv,
+            seed=SEED,
         )
     )
 
@@ -37,6 +38,7 @@ def main():
         verbose=1,
         tensorboard_log=str(RUNS),
         device="cpu",
+        seed=SEED,
     )
 
     checkpoint = CheckpointCallback(
