@@ -14,6 +14,7 @@ class RobotConfig:
     thigh_length: float = 0.2
     shin_length: float = 0.2
     knee_sign: int = 1
+    wheel_radius: float = 0.07
 
     # --- Actions ---
     action_smoothing: float = 0.4

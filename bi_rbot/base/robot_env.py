@@ -48,6 +48,7 @@ class RobotEnv(gym.Env):
     def reset(self, *, seed=None, options=None):
         super().reset(seed=seed)
         mujoco.mj_resetData(self.model, self.data)
+        self._set_starting_pose()
         mujoco.mj_forward(self.model, self.data)
         self._reset_state()
         self._on_reset()
@@ -137,6 +138,12 @@ class RobotEnv(gym.Env):
         return False
 
     # --- State ---
+    def _set_starting_pose(self) -> None:
+        length = sum(self.cfg.leg_length_range) / 2
+        leg = kinematics.leg_ik(kinematics.LegTarget(length, 0.0), self.cfg)
+        self.data.qpos[self.leg_qpos] = [leg.hip, leg.knee, leg.hip, leg.knee]
+        self.data.qpos[2] = self.cfg.ground_z + self.cfg.wheel_radius + length
+
     def _reset_state(self) -> None:
         self.steps = 0
         self.action = np.zeros(len(Actions))
